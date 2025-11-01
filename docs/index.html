@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VibeScale - Measure your connection. Share your vibe. A relationship compatibility calculator app.">
+  <meta name="keywords" content="relationship, compatibility, calculator, love, connection, vibe">
+  <title>VibeScale - Relationship Compatibility Calculator</title>
+  
+  <!-- CSP Meta Tag -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data:; style-src 'self' 'unsafe-inline' data:; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: data: ws: wss: https:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 60px;
+    }
+    
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 30px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+    
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      letter-spacing: 2px;
+    }
+    
+    .tagline {
+      font-size: 1.3rem;
+      opacity: 0.95;
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
+    
+    .main-content {
+      background: white;
+      border-radius: 20px;
+      padding: 50px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      margin-bottom: 40px;
+    }
+    
+    h2 {
+      color: #667eea;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    
+    h3 {
+      color: #764ba2;
+      font-size: 1.5rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    p {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: #555;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
+    
+    .feature-card {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 25px;
+      border-radius: 15px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .feature-card h4 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+    
+    .feature-card p {
+      color: #666;
+      font-size: 1rem;
+    }
+    
+    .cta {
+      text-align: center;
+      margin: 40px 0;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+      box-shadow: none;
+    }
+    
+    .btn-secondary:hover {
+      background: #667eea;
+      color: white;
+    }
+    
+    footer {
+      text-align: center;
+      color: white;
+      padding: 40px 20px;
+      margin-top: 60px;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+      font-size: 1rem;
+    }
+    
+    .footer-links a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    
+    .copyright {
+      opacity: 0.8;
+      font-size: 0.9rem;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .tagline {
+        font-size: 1.1rem;
+      }
+      
+      .main-content {
+        padding: 30px 20px;
+      }
+      
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <img src="icon.png" alt="VibeScale Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='❤️'; this.parentElement.style.fontSize='60px';">
+      </div>
+      <h1>VibeScale</h1>
+      <p class="tagline">Measure your connection. Share your vibe.</p>
+    </header>
+    
+    <div class="main-content">
+      <h2>About VibeScale</h2>
+      <p>
+        VibeScale is a relationship compatibility calculator that helps you understand the connection between you and your partner. 
+        By analyzing personality traits, shared values, lifestyle preferences, and communication styles, VibeScale provides insights 
+        into your relationship dynamics across multiple dimensions.
+      </p>
+      
+      <h3>How It Works</h3>
+      <p>
+        Simply answer a series of questions about yourself and your partner. Our algorithm evaluates compatibility across:
+      </p>
+      
+      <div class="features">
+        <div class="feature-card">
+          <h4>💕 Love & Romance</h4>
+          <p>Measure emotional connection and romantic compatibility</p>
+        </div>
+        
+        <div class="feature-card">
+          <h4>💬 Communication</h4>
+          <p>Assess how well you connect and understand each other</p>
+        </div>
+        
+        <div class="feature-card">
+          <h4>🤝 Trust & Values</h4>
+          <p>Evaluate shared values and trust levels in your relationship</p>
+        </div>
+        
+        <div class="feature-card">
+          <h4>🎯 Overall Compatibility</h4>
+          <p>Get a comprehensive score that reflects your overall connection</p>
+        </div>
+      </div>
+      
+      <h3>Features</h3>
+      <ul style="margin-left: 20px; margin-bottom: 20px; color: #555;">
+        <li style="margin-bottom: 10px;">✨ Beautiful animated compatibility meters</li>
+        <li style="margin-bottom: 10px;">📱 Cross-platform support (Web, Android, iOS)</li>
+        <li style="margin-bottom: 10px;">💾 Save your progress and return anytime</li>
+        <li style="margin-bottom: 10px;">📤 Share your results with friends</li>
+        <li style="margin-bottom: 10px;">🎨 Modern, intuitive user interface</li>
+        <li style="margin-bottom: 10px;">🔒 Privacy-focused design</li>
+      </ul>
+      
+      <div class="cta">
+        <p style="margin-bottom: 25px; font-size: 1.2rem; color: #333;">
+          Ready to discover your compatibility?
+        </p>
+        <a href="/" class="btn">Try VibeScale Now</a>
+      </div>
+    </div>
+    
+    <footer>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="csp-policy.md">Content Security Policy</a>
+        <a href="csae-policy.html">CSAE Policy</a>
+        <a href="mailto:vibescale.app@gmail.com">Contact Us</a>
+      </div>
+      <div class="copyright">
+        © 2025 VibeScale. All rights reserved.
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
+
