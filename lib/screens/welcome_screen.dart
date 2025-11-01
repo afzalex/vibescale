@@ -86,19 +86,21 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         height: 120,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: VibeScaleTheme.loveGradient,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.favorite,
-                          size: 60,
-                          color: Colors.white,
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/vibescale-icon-transparent.png',
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     );

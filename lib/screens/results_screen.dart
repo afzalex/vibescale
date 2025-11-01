@@ -5,7 +5,7 @@ import '../theme/vibescale_theme.dart';
 import '../widgets/share_widget.dart';
 import '../widgets/compatibility_meters.dart';
 import '../services/storage_service.dart';
-import '../screens/input_screen.dart';
+import '../screens/welcome_screen.dart';
 
 class ResultsScreen extends StatefulWidget {
   final CompatibilityResult result;
@@ -271,9 +271,9 @@ class _ResultsScreenState extends State<ResultsScreen>
           width: double.infinity,
           child: OutlinedButton.icon(
             onPressed: () async {
-              // Go to first page with saved data intact
+              // Navigate to welcome screen
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const InputScreen()),
+                MaterialPageRoute(builder: (context) => const WelcomeScreen()),
                 (route) => false,
               );
             },
@@ -290,10 +290,10 @@ class _ResultsScreenState extends State<ResultsScreen>
           width: double.infinity,
           child: TextButton.icon(
             onPressed: () async {
-              // Clear saved data and go to first page
+              // Clear saved data and go to welcome screen
               await StorageService.clearFormData();
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const InputScreen()),
+                MaterialPageRoute(builder: (context) => const WelcomeScreen()),
                 (route) => false,
               );
             },

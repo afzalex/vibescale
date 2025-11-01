@@ -91,6 +91,7 @@ class _RadialCompatibilityMeterState extends State<RadialCompatibilityMeter>
                 value: v,
                 label: widget.label,
                 subLabel: widget.subLabel,
+                meterSize: widget.size,
               ),
             ),
           );
@@ -232,31 +233,67 @@ class _MeterCenterLabel extends StatelessWidget {
     required this.value,
     this.label,
     this.subLabel,
+    required this.meterSize,
   });
 
   final double value;
   final String? label;
   final String? subLabel;
+  final double meterSize;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final score = value.round();
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text('$score', style: theme.textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w800)),
-        const SizedBox(height: 2),
-        Text('compatibility', style: theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-        if (label != null) ...[
-          const SizedBox(height: 8),
-          Text(label!, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
+    // Scale font sizes based on meter size (180 is the baseline)
+    final scale = meterSize / 220;
+    final scoreFontSize = (theme.textTheme.displayMedium?.fontSize ?? 48) * scale;
+    final labelFontSize = (theme.textTheme.labelMedium?.fontSize ?? 12) * scale;
+    final titleFontSize = (theme.textTheme.titleMedium?.fontSize ?? 16) * scale;
+    final subLabelFontSize = (theme.textTheme.bodySmall?.fontSize ?? 12) * scale;
+    
+    return Padding(
+      padding: EdgeInsets.all(meterSize * 0.1), // Add padding to prevent overlap
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '$score',
+            style: theme.textTheme.displayMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+              fontSize: scoreFontSize,
+            ),
+          ),
+          SizedBox(height: 2 * scale),
+          Text(
+            'compatibility',
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontSize: labelFontSize,
+            ),
+          ),
+          if (label != null) ...[
+            SizedBox(height: 8 * scale),
+            Text(
+              label!,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: titleFontSize,
+              ),
+            ),
+          ],
+          if (subLabel != null) ...[
+            SizedBox(height: 2 * scale),
+            Text(
+              subLabel!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                fontSize: subLabelFontSize,
+              ),
+            ),
+          ]
         ],
-        if (subLabel != null) ...[
-          const SizedBox(height: 2),
-          Text(subLabel!, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-        ]
-      ],
+      ),
     );
   }
 }
@@ -369,26 +406,53 @@ class CompatibilityResultCard extends StatelessWidget {
           children: [
             Text(title, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
             const SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Center(
-                    child: RadialCompatibilityMeter(
-                      value: overall,
-                      size: 220,
-                      label: 'Overall',
-                      subLabel: _labelFor(overall),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  flex: 7,
-                  child: _SubscoresGrid(subscores: subscores),
-                ),
-              ],
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final isWide = constraints.maxWidth > 600;
+                final meterSize = (isWide 
+                    ? math.min(220, (constraints.maxWidth * 0.4) - 40)
+                    : math.min(180, constraints.maxWidth - 60)).toDouble();
+                
+                if (isWide) {
+                  // Horizontal layout for wide screens
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: Center(
+                          child: RadialCompatibilityMeter(
+                            value: overall,
+                            size: meterSize,
+                            label: 'Overall',
+                            subLabel: _labelFor(overall),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        flex: 7,
+                        child: _SubscoresGrid(subscores: subscores),
+                      ),
+                    ],
+                  );
+                } else {
+                  // Vertical layout for narrow screens
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      RadialCompatibilityMeter(
+                        value: overall,
+                        size: meterSize,
+                        label: 'Overall',
+                        subLabel: _labelFor(overall),
+                      ),
+                      const SizedBox(height: 24),
+                      _SubscoresGrid(subscores: subscores),
+                    ],
+                  );
+                }
+              },
             ),
           ],
         ),
